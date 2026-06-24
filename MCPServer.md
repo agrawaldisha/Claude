@@ -191,24 +191,4 @@ flowchart TD
 
 ---
 
-## Summary
 
-```mermaid
-mindmap
-  root((MCP Server))
-    Resources
-      Direct
-        Fixed URI
-        Returns list or static data
-      Templated
-        URI with params
-        Fetches specific item
-      Mime Types
-        application/json
-        text/plain
-    Prompts
-      Slash commands
-      Pre-engineered messages
-      list_prompts
-      get_prompt
-```
