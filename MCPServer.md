@@ -31,7 +31,35 @@ async def call_tool(
     return await self.session().call_tool(tool_name, tool_input)  # calls the tool requested by Claude
 ```
 
-![MCP Client diagram](image.png)
+```mermaid
+sequenceDiagram
+    participant User
+    participant OurCode as Our Code
+    participant MCPClient as MCP Client
+    participant MCPServer as MCP Server
+    participant Claude
+    participant Github
+
+    User->>OurCode: What repositories do I have?
+    OurCode->>MCPClient: I need a list of tools to send to Claude
+    MCPClient->>MCPServer: ListToolsRequest
+    MCPServer-->>MCPClient: ListToolsResult
+    MCPClient-->>OurCode: Here are the tools
+
+    OurCode->>Claude: Query + Tools
+
+    Claude-->>OurCode: ToolUse
+    OurCode->>MCPClient: Please run this tool with these args
+    MCPClient->>MCPServer: CallToolRequest
+    MCPServer->>Github: Request to Github
+    Github-->>MCPServer: Response
+    MCPServer-->>MCPClient: CallToolResult
+    MCPClient-->>OurCode: Here's the result of running the tool
+
+    OurCode->>Claude: toolResult
+    Claude-->>OurCode: Your repositories are...
+    OurCode-->>User: Your repositories are...
+```
 
 # Defining Resources in MCP
 
